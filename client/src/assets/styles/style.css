@@ -41,3 +41,16 @@ body{
 .toggle{
     display: none;
 }
+
+.btn-add-styling{
+    margin-left: -12px;
+}
+
+thead tr td {
+    font-weight: 700;
+}
+
+.form-edit-styling{
+    width: 200px;
+    max-width: 200px;
+}

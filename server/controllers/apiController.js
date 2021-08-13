@@ -7,12 +7,10 @@ module.exports = {
     userReference.on(
       "value",
       function (snapshot) {
-        res.json(snapshot.val());
+        const data = Object.keys(snapshot.val()).map(o => Object.assign({ id: o }, snapshot.val()[o]));
+        console.log("page1", req.body.page)
+        res.json({data, size: data.length});
         userReference.off("value");
-      },
-      function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-        res.send("The read failed: " + errorObject.code);
       }
     );
   },

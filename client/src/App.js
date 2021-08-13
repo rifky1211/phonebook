@@ -1,17 +1,54 @@
-import React from 'react'
+import { Component } from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./assets/styles/style.css";
+import 'jquery/dist/jquery.min.js';
+import 'popper.js/dist/popper.min.js';
+
 import "./assets/fontawesome/css/all.min.css";
+import "./assets/styles/style.css";
 
-import Flux from './views/Flux'
+import Flux from "./views/Flux";
+import { Container } from "flux/utils";
+import UserStore from "./flux/UserStore";
+import UserActions from "./flux/UserActions";
 
-function App() {
-  return (
-    <div className="App">
-      <Flux></Flux>
-    </div>
-  );
+const convert = function (containerClass) {
+  const tmp = containerClass;
+  containerClass = function (...args) {
+    return new tmp(...args);
+  };
+  containerClass.prototype = tmp.prototype;
+  containerClass.getStores = tmp.getStores;
+  containerClass.calculateState = tmp.calculateState;
+
+  return containerClass;
+};
+
+class App extends Component {
+  static getStores() {
+    return [UserStore];
+  }
+
+  static calculateState(prevState) {
+    return {
+      users: UserStore.getState(),
+
+      onLoad: UserActions.loadUser,
+      onAdd: UserActions.addUser,
+      onResend: UserActions.resendUser,
+      onDelete: UserActions.deleteUser,
+      onFilter: UserActions.filterUser,
+      onEdit: UserActions.editUser
+
+    };
+  }
+
+  render() {
+    return (
+
+        <Flux {...this.state}></Flux>
+    );
+  }
 }
 
-export default App;
+export default Container.create(convert(App));

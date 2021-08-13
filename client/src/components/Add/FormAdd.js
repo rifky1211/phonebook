@@ -33,12 +33,13 @@ export default class FormAdd extends Component {
     e.preventDefault();
     document.getElementById("form-add").style.display = "none";
     document.getElementById("btn-add").style.display = "block";
+    this.setState({ name: "", phone: "" });
   }
 
   handleSubmit(event) {
-    alert(this.state.name);
-    this.setState({ name: "", phone: "" });
     event.preventDefault();
+    this.props.add(this.state.name, this.state.phone)
+    this.setState({ name: "", phone: "" });
   }
 
   render() {
@@ -47,7 +48,7 @@ export default class FormAdd extends Component {
         <div className="container mt-4">
           <button
             id="btn-add"
-            className="btn btn-lg btn-primary"
+            className="btn btn-primary btn-add-styling"
             onClick={this.toggleAdd}
           >
             <i className="fas fa-plus"></i> Add
@@ -73,10 +74,10 @@ export default class FormAdd extends Component {
               value={this.state.phone}
               onChange={this.handleChange}
             />
-            <button className="btn btn-success btn-lg mx-2"><i className="fas fa-check-circle"></i> Post</button>
+            <button className="btn btn-success mx-2"><i className="fas fa-check-circle"></i> Post</button>
             <button
               onClick={this.toggleCancelAdd}
-              className="btn btn-warning btn-lg"
+              className="btn btn-warning"
             > <i className="fas fa-ban"></i> Cancel
             </button>
           </form>
