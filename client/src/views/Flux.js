@@ -14,7 +14,7 @@ export default class Flux extends Component {
   render() {
     return (
       <div>
-        <Header></Header>
+          <Header></Header>
         <FormAdd add={this.props.onAdd}></FormAdd>
         <FormSearch filter={this.props.onFilter}></FormSearch>
         <TableHead
@@ -23,7 +23,10 @@ export default class Flux extends Component {
           resend={this.props.onResend}
           delete={this.props.onDelete}
         ></TableHead>
-        <Pagination page={this.props.onLoad} users={this.props.users}></Pagination>
+        <Pagination
+          page={this.props.onLoad}
+          users={this.props.users}
+        ></Pagination>
       </div>
     );
   }
