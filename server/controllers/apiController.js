@@ -8,8 +8,8 @@ module.exports = {
       "value",
       function (snapshot) {
         const data = Object.keys(snapshot.val()).map(o => Object.assign({ id: o }, snapshot.val()[o]));
-        console.log("page1", req.body.page)
-        res.json({data, size: data.length});
+        const realData = Object.keys(data).map(o => Object.assign({ total: data.length }, data[o]));
+        res.json({realData});
         userReference.off("value");
       }
     );

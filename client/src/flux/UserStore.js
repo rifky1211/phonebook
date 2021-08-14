@@ -18,6 +18,7 @@ class UserStore extends ReduceStore {
         return Immutable.OrderedMap(
           action.phonebooks.map((item) => {
             item.sent = true;
+            console.log(item.total)
             return [item.id, item];
           })
         );

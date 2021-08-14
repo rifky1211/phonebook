@@ -6,21 +6,26 @@ export default class Pagination extends Component {
   }
 
   render() {
-    let pages = Math.ceil(this.props.users.size / 3);
+    let totalData = []
+    this.props.users.forEach(item => {
+     totalData.push(item.total)
+    });
+    let pages = Math.ceil(totalData[0] / 3);
     const totalPage = [];
     for (let i = 0; i < pages; i++) {
       totalPage.push(1);
     }
     const nodeList = totalPage.map((item, index) => {
       return (
-        <li key={index} className={this.state.page === index ? 'page-item active': 'page-item'}>
+        <li key={index} className={this.state.page === index + 1 ? 'page-item active': 'page-item'}>
           <a
             className="page-link"
             href="/"
             onClick={(e) => {
               e.preventDefault();
               this.props.page(index + 1);
-              this.setState({page: index})
+              this.setState({page: index + 1})
+              
             }}
           >
             {index + 1}

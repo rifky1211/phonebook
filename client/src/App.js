@@ -38,7 +38,7 @@ class App extends Component {
       onResend: UserActions.resendUser,
       onDelete: UserActions.deleteUser,
       onFilter: UserActions.filterUser,
-      onEdit: UserActions.editUser
+      onEdit: UserActions.editUser,
 
     };
   }

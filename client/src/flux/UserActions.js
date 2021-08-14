@@ -10,12 +10,9 @@ const Actions = {
   },
 
   loadUser(page) {
-    axios.post("http://localhost:3000/api/phonebook/page", {
-      page: 1
-    }).then((phonebooks) => {
-      console.log(page)
-      console.log("hasil ", phonebooks.data.size)
-      Actions.drawUser(phonebooks.data.data);
+    axios.get("http://localhost:3000/api/phonebook").then((phonebooks) => {
+      let page1 = page || 1
+      Actions.drawUser(phonebooks.data.realData.slice((page1-1) * 3, page1 * 3))
     });
   },
 

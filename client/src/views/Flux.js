@@ -9,7 +9,6 @@ import Pagination from "../components/Pagination/Pagination";
 export default class Flux extends Component {
   componentDidMount() {
     this.props.onLoad();
-    console.log(this.props.users)
   }
 
   render() {
