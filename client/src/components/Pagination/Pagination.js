@@ -38,14 +38,14 @@ export default class Pagination extends Component {
       <div className="justify-content-center">
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center">
-            <li className="page-item">
-              <a className="page-link" href="/">
+            <li className={this.state.page < 2 ? 'page-item disabled' : 'page-item'}>
+              <a className="page-link" href="/" onClick={(e) => {e.preventDefault();this.props.page(this.state.page - 1); this.setState({page: this.state.page - 1}); }}>
                 Previous
               </a>
             </li>
             {nodeList}
-            <li className="page-item">
-              <a className="page-link" href="/">
+            <li className={this.state.page < totalPage.length ? 'page-item' : 'page-item disabled'}>
+              <a className="page-link" href="/" onClick={(e) => {e.preventDefault();this.props.page(this.state.page + 1); this.setState({page: this.state.page + 1}); }}>
                 Next
               </a>
             </li>
