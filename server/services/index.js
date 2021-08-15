@@ -8,7 +8,9 @@ const getContact = () => {
       if (folders === null) {
         resolve([]);
       }else{
-        const data = Object.keys(folders).map(o => Object.assign({ id: o }, folders[o]));
+        const realdata = Object.keys(folders).map(o => Object.assign({ id: o }, folders[o]));
+        const data = Object.keys(realdata).map(o => Object.assign({ total: realdata.length }, realdata[o]));
+        
         resolve(data);
       }
       userReference.off("value");
