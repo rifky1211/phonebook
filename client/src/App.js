@@ -11,6 +11,7 @@ import Flux from "./views/Flux";
 import { Container } from "flux/utils";
 import UserStore from "./flux/UserStore";
 import UserActions from "./flux/UserActions";
+import PageFilterStore from './flux/PageFilterStore'
 
 const convert = function (containerClass) {
   const tmp = containerClass;
@@ -26,13 +27,14 @@ const convert = function (containerClass) {
 
 class App extends Component {
   static getStores() {
-    return [UserStore];
+    return [UserStore, PageFilterStore];
   }
 
   static calculateState(prevState) {
     return {
       users: UserStore.getState(),
-
+      pageFilter: PageFilterStore.getState(),
+      
       onLoad: UserActions.loadUser,
       onAdd: UserActions.addUser,
       onResend: UserActions.resendUser,

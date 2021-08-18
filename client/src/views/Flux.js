@@ -9,6 +9,7 @@ import Pagination from "../components/Pagination/Pagination";
 export default class Flux extends Component {
   componentDidMount() {
     this.props.onLoad();
+    console.log("pageFilter", this.props.pageFilter)
   }
 
   render() {
@@ -16,7 +17,7 @@ export default class Flux extends Component {
       <div>
           <Header></Header>
         <FormAdd add={this.props.onAdd}></FormAdd>
-        <FormSearch filter={this.props.onFilter}></FormSearch>
+        <FormSearch filter={this.props.onLoad}></FormSearch>
         <TableHead
           edit={this.props.onEdit}
           users={this.props.users}
@@ -24,8 +25,8 @@ export default class Flux extends Component {
           delete={this.props.onDelete}
         ></TableHead>
         <Pagination
-          page={this.props.onLoad}
-          users={this.props.users}
+          page={this.props.pageFilter}
+          load={this.props.onLoad}
         ></Pagination>
       </div>
     );

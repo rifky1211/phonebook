@@ -76,6 +76,7 @@ export const addUser = (name, phone) => {
       })
       .catch((err) => {
         dispatch(failedAddUser(id, name, phone));
+        dispatch(loadUser())
       });
   };
 };

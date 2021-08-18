@@ -12,7 +12,6 @@ export default function Pagination() {
     }),
     shallowEqual
   );
-  console.log(pageFilter)
   let pages = Math.ceil(pageFilter.totalData / 3);
   const totalPage = [];
     for (let i = 0; i < pages; i++) {

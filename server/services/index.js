@@ -24,9 +24,7 @@ const getContact = (limit, offset, name, phone) => {
               return item;
             }
           });
-          console.log("data sebelum di slice",data)
           data = data.slice(offset, offset + limit)
-          console.log("data se", data, offset, limit, name, phone)
           resolve(data);
         }
         userReference.off("value");

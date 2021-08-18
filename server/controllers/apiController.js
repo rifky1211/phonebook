@@ -7,9 +7,21 @@ module.exports = {
     userReference.on(
       "value",
       function (snapshot) {
-        const data = Object.keys(snapshot.val()).map(o => Object.assign({ id: o }, snapshot.val()[o]));
-        const realData = Object.keys(data).map(o => Object.assign({ total: data.length }, data[o]));
-        res.json({realData});
+        let data = Object.keys(snapshot.val()).map(o => Object.assign({ id: o }, snapshot.val()[o]));
+        data = data = data.filter((item) => {
+          if (req.query.name && req.query.phone) {
+            return item.name.includes(req.query.name) && item.phone.includes(req.query.phone);
+          } else if (req.query.name) {
+            return item.name.includes(req.query.name);
+          } else if (req.query.phone) {
+            return item.phone.includes(req.query.phone);
+          } else {
+            return item;
+          }
+        });
+        let totalData = data.length
+        data = data.slice(parseInt(req.query.offset), parseInt(req.query.offset) + parseInt(req.query.limit))
+        res.status(200).json({data, count: totalData});
         userReference.off("value");
       }
     );

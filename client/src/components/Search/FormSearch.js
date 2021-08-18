@@ -29,8 +29,8 @@ export default class FormSearch extends Component {
   }
 
   handleSubmit(event) {
-    this.props.filter(this.state.name, this.state.phone)
     event.preventDefault();
+    this.props.filter(1, this.state.name, this.state.phone)
   }
 
   render() {
