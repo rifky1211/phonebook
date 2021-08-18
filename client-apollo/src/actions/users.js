@@ -10,6 +10,7 @@ import {
   REMOVE_USER,
   SUCCESS_FIND_USER,
   DRAW_EDIT_USER,
+  UPDATE_FILTER,
 } from "../constants";
 
 const API_URL = "http://localhost:3000/graphql";
@@ -23,25 +24,40 @@ const drawLoadUser = (users) => ({
   users,
 });
 
-export const loadUser = (page) => {
+export const setPageFilter = (page, name, phone, totalData) => ({
+  type: UPDATE_FILTER,
+  page, name, phone, totalData
+})
+
+export const loadUser = (page = 1, name = "", phone = "") => {
+  const limit = 3
+  let pageReal = (page - 1) * limit
+  let searchName = name || ""
+  let searchPhone = phone || ""
+  console.log(pageReal, limit, name, phone )
   const usersQuery = gql`
     query {
-      contacts {
-        id
-        name
-        phone
+      contact(pagination: {offset: ${pageReal}, limit: ${limit}, name: "${searchName}", phone: "${searchPhone}"}) {
+        items {
+          id
+          name
+          phone
+        }
+        count
       }
     }
   `;
-  let page1 = page || 1;
   return (dispatch) => {
     return request
       .query({
         query: usersQuery,
       })
       .then((response) => {
-        dispatch(drawLoadUser(response.data.contacts));
-      });
+        dispatch(drawLoadUser(response.data.contact.items));
+        dispatch(setPageFilter(page, name, phone, response.data.contact.count))
+      }).catch(err => {
+        console.log(err)
+      })
   };
 };
 const drawAddUser = (id, name, phone) => ({
@@ -51,44 +67,45 @@ const drawAddUser = (id, name, phone) => ({
   phone,
 });
 
-const successAddUser = () => ({
+const successAddUser = (id) => ({
   type: SUCCESS_ADD_USER,
+  id
 });
 
-const failedAddUser = (id, name, phone) => ({
+const failedAddUser = (id) => ({
   type: FAILED_ADD_USER,
   id,
-  name,
-  phone,
 });
 
 export const addUser = (name, phone) => {
-  const id = Date.now();
+  let id = Date.now().toString();
   const addQuery = gql`
-    mutation addContact($id: Int!, $name: String!, $phone: String!) {
+    mutation addContact($id: String!, $name: String!, $phone: String!) {
       addContact(id: $id, name: $name, phone: $phone) {
-        id: ${id},
-        name,
+        id
+        name
         phone
       }
     }
   `;
   return (dispatch) => {
-    dispatch(drawAddUser(id, name, phone));
     return request
-      .mutate({
-        mutation: addQuery,
-        variables: {
-          id: id,
-          name: name,
-          phone: phone,
-        },
+    .mutate({
+      mutation: addQuery,
+      variables: {
+        id,
+        name,
+        phone,
+      },
+    })
+    .then(function (response) {
+        dispatch(successAddUser(id));
+        dispatch(loadUser())
       })
-      .then(function (response) {
-        dispatch(successAddUser());
-      }).catch(err => {
-        dispatch(failedAddUser(id))
-      })
+      .catch((err) => {
+        console.log(err)
+        dispatch(failedAddUser(id));
+      });
   };
 };
 
@@ -97,8 +114,33 @@ const successResendUser = (id) => ({
   id,
 });
 
-export const resendUser = (id, name, phone) => {
-  return (dispatch) => {};
+export const resendUser = (id,name, phone) => {
+  console.log(id)
+  const addQuery = gql`
+    mutation updateContact($id: String!, $name: String!, $phone: String!) {
+      addContact(id: $id, name: $name, phone: $phone) {
+        id
+        name
+        phone
+      }
+    }
+  `;
+  return (dispatch) => {
+    return request.mutate({
+      mutation: addQuery,
+      variables: {
+          id,
+          name,
+          phone
+      }
+  })
+    .then(function (response) {
+      console.log(response);
+      dispatch(successResendUser(id));
+    }).catch(err => {
+      console.log(err)
+    })  
+  };
 };
 
 const removeUser = (id) => ({
@@ -107,7 +149,24 @@ const removeUser = (id) => ({
 });
 
 export const deleteUser = (id) => {
-  return (dispatch) => {};
+  const deleteQuery = gql`
+    mutation removeContact($id: String!) {
+        removeContact(id: $id) {
+        id
+        }
+    }`;
+  return (dispatch) => {
+
+    dispatch(removeUser(id));
+    return request.mutate({
+      mutation: deleteQuery,
+      variables: {
+          id
+      }
+  })
+    .then(function (response) {
+    })
+  };
 };
 
 const successFindUser = (name, phone) => ({

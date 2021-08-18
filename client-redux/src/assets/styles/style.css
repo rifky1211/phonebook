@@ -46,7 +46,7 @@ body{
     margin-left: -12px;
 }
 
-thead tr td {
+thead tr td .data-styling{
     font-weight: 700;
 }
 

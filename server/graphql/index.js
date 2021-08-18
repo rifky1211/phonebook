@@ -1,9 +1,10 @@
 const {GraphQLSchema, GraphQLObjectType} = require('graphql');
-var queryType = require('./queries/contacts').queryType;
+var QueryType = require('./queries/index')
 var mutations = require('./mutations/index');
 
+console.log("mutations", mutations)
 exports.contactSchema = new GraphQLSchema({
-  query: queryType,
+  query: QueryType,
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: mutations

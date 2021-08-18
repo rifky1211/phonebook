@@ -1,9 +1,10 @@
 var {GraphQLNonNull, GraphQLString} = require('graphql');
-var UserType = require('../types/contact');
+var ContactType = require('../types/contact');
 var services = require('../../services');
 
+console.log("contact", ContactType.contactType)
 exports.remove = {
-  type: UserType.contactType,
+  type: ContactType.contactType,
   args: {
     id: {
       type: new GraphQLNonNull(GraphQLString)

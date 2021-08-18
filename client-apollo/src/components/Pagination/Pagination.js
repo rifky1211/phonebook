@@ -1,27 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { loadUser } from "../../actions/users";
 
 
 export default function Pagination() {
-  const initialState = {
-    page: 1,
-  };
+ 
 
-  const [{ page }, setState] = useState(initialState);
-
-  const { users } = useSelector(
+  const { pageFilter } = useSelector(
     (state) => ({
       users: state.users,
+      pageFilter: state.pageFilter
     }),
     shallowEqual
   );
-  console.log(users)
-  let totalData = [];
-  users.forEach((item) => {
-    totalData.push(item.total);
-  });
-  let pages = Math.ceil(totalData[0] / 3);
+  
+  let pages = Math.ceil(pageFilter.totalData / 3);
   const totalPage = [];
     for (let i = 0; i < pages; i++) {
       totalPage.push(1);
@@ -32,15 +25,13 @@ export default function Pagination() {
 
     const nodeList = totalPage.map((item, index) => {
         return (
-          <li key={index} className={page === index + 1 ? 'page-item active': 'page-item'}>
+          <li key={index} className={pageFilter.page === index + 1 ? 'page-item active': 'page-item'}>
             <a
               className="page-link"
               href="/"
               onClick={(e) => {
                 e.preventDefault();
                 dispatch(loadUser(index + 1))
-                setState({page: index + 1})
-                
               }}
             >
               {index + 1}
@@ -55,15 +46,14 @@ export default function Pagination() {
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
           <li
-            className={page < 2 ? "page-item disabled" : "page-item"}
+            className={pageFilter.page < 2 ? "page-item disabled" : "page-item"}
           >
             <a
               className="page-link"
               href="/"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(loadUser(page - 1))
-                setState({ page: page - 1 });
+                dispatch(loadUser(pageFilter.page - 1))
               }}
             >
               Previous
@@ -72,7 +62,7 @@ export default function Pagination() {
           {nodeList}
           <li
             className={
-              page < totalPage.length
+              pageFilter.page < totalPage.length
                 ? "page-item"
                 : "page-item disabled"
             }
@@ -82,8 +72,7 @@ export default function Pagination() {
               href="/"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(loadUser(page + 1))
-                setState({ page: page + 1 });
+                dispatch(loadUser(pageFilter.page + 1))
               }}
             >
               Next

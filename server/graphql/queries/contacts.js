@@ -1,16 +1,25 @@
-const {GraphQLObjectType, GraphQLList} = require('graphql');
-var services = require('../../services');
-var userType = require('../types/contact').contactType;
+const ContactType = require('../types/contact');
+const PaginationArgType = require('../types/paginationParam');
+const PaginatedListType = require('../types/paginationOutput');
+const service = require('../../services/index')
 
-// Query
-exports.queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: function () {
-    return {
-      contacts: {
-        type: new GraphQLList(userType),
-        resolve: services.getContact
+const TodoQueryTypes = {
+  contact: {
+    type: PaginatedListType(ContactType.contactType),
+    args: {
+      pagination: {
+        type: PaginationArgType,
+        defaultValue: { offset: 0, limit: 3, name: "", phone: "" }
+      },
+    },
+    resolve: (_, args) => {
+      const { offset, limit, name, phone } = args.pagination
+      return {
+        items: service.getContact(limit, offset, name, phone),
+        count: service.totalData(name, phone)
       }
-    }
+    },
   }
-});
+}
+
+module.exports = TodoQueryTypes

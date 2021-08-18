@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import HeaderSearch from "./HeaderSearch";
-import { findUser,  } from "../../actions/users";
+import {  loadUser,  } from "../../actions/users";
 
 export default function FormAdd(props) {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export default function FormAdd(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(findUser(name, phone));
+    dispatch(loadUser(1, name, phone));
   };
 
   return (

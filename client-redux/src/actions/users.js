@@ -6,7 +6,8 @@ import {
   SUCCESS_RESEND_USER,
   REMOVE_USER,
   SUCCESS_FIND_USER,
-  DRAW_EDIT_USER
+  DRAW_EDIT_USER,
+  SUCCESS_EDIT_USER
 } from "../constants";
 
 import axios from "axios";
@@ -105,12 +106,18 @@ const drawEditUser = (id, name, phone) => ({
   id,name,phone
 })
 
+const successEditUser = (id) => ({
+  type: SUCCESS_EDIT_USER,
+  id
+})
+
 export const updateUser = (id, name, phone) => {
   return (dispatch) => {
     dispatch(drawEditUser(id,name,phone))
     return axios
     .put("http://localhost:3000/api/phonebook/" + id, {name, phone})
     .then((user) => {
+      dispatch(successEditUser(id))
       }).catch(err => {
 
       });

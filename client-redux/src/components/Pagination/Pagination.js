@@ -16,7 +16,6 @@ export default function Pagination() {
     }),
     shallowEqual
   );
-  console.log(users)
   let totalData = [];
   users.forEach((item) => {
     totalData.push(item.total);

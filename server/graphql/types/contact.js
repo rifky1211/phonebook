@@ -3,6 +3,7 @@ const {
   GraphQLNonNull,
   GraphQLID,
   GraphQLString,
+  GraphQLInt
 } = require("graphql");
 
 // User Type
@@ -18,7 +19,7 @@ exports.contactType = new GraphQLObjectType({
       },
       phone: {
         type: GraphQLString,
-      },
+      }
     };
   },
 });

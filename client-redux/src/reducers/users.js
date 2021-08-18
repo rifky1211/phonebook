@@ -7,7 +7,8 @@ import {
   REMOVE_USER,
   SUCCESS_REMOVE_USER,
   SUCCESS_FIND_USER,
-  DRAW_EDIT_USER
+  DRAW_EDIT_USER,
+  SUCCESS_EDIT_USER,
 } from "../constants";
 
 const users = (state = [], action) => {
@@ -51,29 +52,34 @@ const users = (state = [], action) => {
       });
 
     case REMOVE_USER:
-      return state.filter(item => {
-       return item.id !== action.id
-      })
+      return state.filter((item) => {
+        return item.id !== action.id;
+      });
 
-      case SUCCESS_FIND_USER:
-        return state.filter((item) => {
-          if (action.name) {
-            return item.name.includes(action.name);
-          } else if (action.phone) {
-            return item.phone.includes(action.phone);
-          } else {
-            return item;
-          }
-        });
+    case SUCCESS_FIND_USER:
+      return state.filter((item) => {
+        if (action.name) {
+          return item.name.includes(action.name);
+        } else if (action.phone) {
+          return item.phone.includes(action.phone);
+        } else {
+          return item;
+        }
+      });
 
-        case DRAW_EDIT_USER:
-          return [
-            ...state
-          ];
+    case DRAW_EDIT_USER:
+      return state.map((item) => {
+        if (item.id === action.id) {
+          item.name = action.name
+          item.phone = action.phone
+          console.log("aaa")
+        }
+        return item
+      });
 
     case SUCCESS_ADD_USER:
+    case SUCCESS_EDIT_USER:
     case SUCCESS_REMOVE_USER:
-      break;
     default:
       return state;
   }

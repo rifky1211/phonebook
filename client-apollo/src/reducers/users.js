@@ -15,7 +15,6 @@ const users = (state = [], action) => {
     case DRAW_LOAD_USER:
       return action.users.map((item) => {
         return {
-          total: item.total,
           id: item.id,
           name: item.name,
           phone: item.phone,
@@ -73,7 +72,6 @@ const users = (state = [], action) => {
 
     case SUCCESS_ADD_USER:
     case SUCCESS_REMOVE_USER:
-      break;
     default:
       return state;
   }

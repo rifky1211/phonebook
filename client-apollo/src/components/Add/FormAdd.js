@@ -29,7 +29,6 @@ export default function FormAdd(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addUser(name, phone));
-    dispatch(loadUser())
     setState({ ...initialState });
     document.getElementById("form-add").style.display = "none";
     document.getElementById("btn-add").style.display = "block";
