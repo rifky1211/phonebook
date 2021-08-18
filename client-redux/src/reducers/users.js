@@ -16,7 +16,6 @@ const users = (state = [], action) => {
     case DRAW_LOAD_USER:
       return action.users.map((item) => {
         return {
-          total: item.total,
           id: item.id,
           name: item.name,
           phone: item.phone,

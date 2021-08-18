@@ -7,7 +7,8 @@ import {
   REMOVE_USER,
   SUCCESS_FIND_USER,
   DRAW_EDIT_USER,
-  SUCCESS_EDIT_USER
+  SUCCESS_EDIT_USER,
+  UPDATE_FILTER
 } from "../constants";
 
 import axios from "axios";
@@ -17,13 +18,31 @@ const drawLoadUser = (users) => ({
   users,
 });
 
-export const loadUser = (page) => {
-  let page1 = page || 1
+export const setPageFilter = (page, name, phone, totalData) => ({
+  type: UPDATE_FILTER,
+  page, name, phone, totalData
+})
+
+export const loadUser = (page = 1, name = "", phone = "") => {
+  const limit = 3
+  let offset = (page - 1) * limit
   return (dispatch) => {
     return axios
-      .get("http://localhost:3000/api/phonebook")
+      .get("http://localhost:3000/api/phonebook", {
+        params:{
+          limit,
+          offset,
+          name,
+          phone
+        }
+      })
       .then((phonebooks) => {
-        dispatch(drawLoadUser(phonebooks.data.realData.slice((page1-1) * 3, page1 * 3)));
+        dispatch(
+          drawLoadUser(
+            phonebooks.data.data
+          )
+        );
+        dispatch(setPageFilter(page, name, phone, phonebooks.data.count))
       });
   };
 };
@@ -70,56 +89,59 @@ export const resendUser = (id, name, phone) => {
   return (dispatch) => {
     return axios
       .post("http://localhost:3000/api/phonebook", { id, name, phone })
-      .then((user) => {dispatch(successResendUser(id))});
+      .then((user) => {
+        dispatch(successResendUser(id));
+      });
   };
 };
 
 const removeUser = (id) => ({
   type: REMOVE_USER,
-  id
+  id,
 });
-
 
 export const deleteUser = (id) => {
   return (dispatch) => {
     return axios
-    .delete("http://localhost:3000/api/phonebook/" + id)
-    .then((user) => {
-        dispatch(removeUser( id))
+      .delete("http://localhost:3000/api/phonebook/" + id)
+      .then((user) => {
+        dispatch(removeUser(id));
       });
   };
 };
 
 const successFindUser = (name, phone) => ({
   type: SUCCESS_FIND_USER,
-  name,phone
-})
+  name,
+  phone,
+});
 
 export const findUser = (name, phone) => {
-  return dispatch => {
-    dispatch(successFindUser(name, phone))
-  }
-}
+  return (dispatch) => {
+    dispatch(successFindUser(name, phone));
+  };
+};
 
 const drawEditUser = (id, name, phone) => ({
-  type:DRAW_EDIT_USER,
-  id,name,phone
-})
+  type: DRAW_EDIT_USER,
+  id,
+  name,
+  phone,
+});
 
 const successEditUser = (id) => ({
   type: SUCCESS_EDIT_USER,
-  id
-})
+  id,
+});
 
 export const updateUser = (id, name, phone) => {
   return (dispatch) => {
-    dispatch(drawEditUser(id,name,phone))
+    dispatch(drawEditUser(id, name, phone));
     return axios
-    .put("http://localhost:3000/api/phonebook/" + id, {name, phone})
-    .then((user) => {
-      dispatch(successEditUser(id))
-      }).catch(err => {
-
-      });
+      .put("http://localhost:3000/api/phonebook/" + id, { name, phone })
+      .then((user) => {
+        dispatch(successEditUser(id));
+      })
+      .catch((err) => {});
   };
 };
